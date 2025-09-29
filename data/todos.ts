@@ -1,0 +1,42 @@
+export const exampleToDos = [
+  {
+    id: 1,
+    title: "Finish reading the book",
+    isImportant: false,
+    isCompleted: false,
+    timeOfEntry: "2025-09-20",
+    timeOfCompletion: null,
+  },
+  {
+    id: 2,
+    title: "Buy groceries",
+    isImportant: false,
+    isCompleted: true,
+    timeOfEntry: "2025-09-15",
+    timeOfCompletion: "2025-09-25",
+  },
+  {
+    id: 3,
+    title: "Write a blog post",
+    isImportant: false,
+    isCompleted: false,
+    timeOfEntry: "2025-09-05",
+    timeOfCompletion: null,
+  },
+  {
+    id: 4,
+    title: "Clean the house",
+    isImportant: false,
+    isCompleted: false,
+    timeOfEntry: "2025-08-15",
+    timeOfCompletion: null,
+  },
+  {
+    id: 5,
+    title: "Work out",
+    isImportant: false,
+    isCompleted: false,
+    timeOfEntry: "2025-08-05",
+    timeOfCompletion: null,
+  },
+];
