@@ -5,6 +5,10 @@ import { Colors } from "@/constants/themeColors";
 export type Theme = {
   text: string;
   background: string;
+  zebraStripeBackground: {
+    firstColor: string;
+    secondColor: string;
+  };
   icon: string;
   button: string;
 };

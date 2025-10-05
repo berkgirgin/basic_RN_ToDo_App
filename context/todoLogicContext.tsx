@@ -8,9 +8,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useRouter } from "expo-router";
-import { useState, createContext, useContext, type ReactNode } from "react";
+import {
+  useState,
+  createContext,
+  useContext,
+  type ReactNode,
+  useEffect,
+} from "react";
 
 import { DateHelper } from "../utilities/dateHelper";
+import { LocalStorage } from "@/utilities/localStorage";
 import {
   getAddedMessage,
   getCompletedMessage,
@@ -36,6 +43,7 @@ type ToDoLogicProps = {
 };
 
 const dateHelper = DateHelper();
+const localStorage = LocalStorage();
 
 const todoLogicContext = createContext<ToDoLogicProps | null>(null);
 function useTodoLogicContext() {
@@ -51,8 +59,34 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
 
   // latest toDo with biggest ID should be first, not last
   const [toDosArray, setToDosArray] = useState<ToDo[]>(
-    sortTodoList(exampleToDos)
+    // sortTodoList(exampleToDos)
+    []
   );
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const initialData = await localStorage.fetchData();
+        setToDosArray(initialData);
+      } catch (error) {
+        console.error("Failed to load todos:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const storeData = async () => {
+      try {
+        await localStorage.storeData(toDosArray);
+      } catch (error) {
+        console.error("Failed to store todos:", error);
+      }
+    };
+
+    storeData();
+  }, [toDosArray]);
 
   // logic for max important todo limit
   const MAX_IMPORTANT_TODO_LIMIT = 5;

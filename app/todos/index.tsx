@@ -4,8 +4,6 @@ import {
   View,
   TextInput,
   Pressable,
-  FlatList,
-  ScrollView,
   SectionList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,74 +28,59 @@ export default function MainPage() {
 
   const [input, setInput] = useState("");
 
-  // get important todos and rest of them
-  //********************** */
-  const importantTodos = [];
-  const nonImportantTodos = [];
-
-  for (let i = 0; i < todoLogic.toDosArray.length; i++) {
-    const todo = todoLogic.toDosArray[i];
-
-    if (todo.isImportant) {
-      importantTodos.push(todo);
-    } else {
-      nonImportantTodos.push(todo);
-    }
-  }
+  // split todos into important and non-important
+  const importantTodos = todoLogic.toDosArray.filter((t) => t.isImportant);
+  const nonImportantTodos = todoLogic.toDosArray.filter((t) => !t.isImportant);
 
   sortTodoList(importantTodos);
   sortTodoList(nonImportantTodos);
 
-  //********************** */
+  const sections = [
+    { title: "IMPORTANT TODOS", data: importantTodos },
+    { title: "REST OF THE TODOS", data: nonImportantTodos },
+  ];
 
-  // todo items to be rendered in Flatlists
-  //********************** */
+  // render a single todo item
   function renderItem({ item }: { item: ToDo }) {
-    const { id } = item;
     return (
-      <View style={styles.flatlistItem}>
+      <Animated.View style={styles.flatlistItem} layout={LinearTransition}>
         <Pressable
-          onPress={() => todoLogic.handleTodoShortPress(id)}
-          onLongPress={() => todoLogic.handleTodoLongPress(id)}
+          onPress={() => todoLogic.handleTodoShortPress(item.id)}
+          onLongPress={() => todoLogic.handleTodoLongPress(item.id)}
+          style={{ flex: 1 }}
         >
-          {/* <Text>ID: {item.id}</Text> */}
           <Text
             style={[styles.todoText, item.isCompleted && styles.completedText]}
           >
-            Title: {item.title}
+            {item.title}
           </Text>
-          {/* <Text>Is Important: {item.isImportant ? "yes" : "no"}</Text>
-          <Text>Is Completed: {item.isCompleted ? "yes" : "no"}</Text>
-          <Text>Time of Completion: {item.timeOfCompletion}</Text> */}
         </Pressable>
-        <Pressable onPress={() => todoLogic.deleteToDo(id)}>
-          <MaterialCommunityIcons
-            name="delete-circle"
-            size={36}
-            color="red"
-            // selectable={undefined} ??
-          />
+        <Pressable onPress={() => todoLogic.deleteToDo(item.id)}>
+          <MaterialCommunityIcons name="delete-circle" size={36} color="red" />
         </Pressable>
-      </View>
+      </Animated.View>
     );
   }
-  //********************** */
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Input + buttons */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           value={input}
           onChangeText={setInput}
           placeholder="enter a To Do.."
+          placeholderTextColor={"grey"}
         />
 
         <Pressable
           style={[styles.button, styles.addButton]}
           onPress={() => {
-            todoLogic.addToDo(input);
-            setInput("");
+            if (input.trim()) {
+              todoLogic.addToDo(input);
+              setInput("");
+            }
           }}
         >
           <Text style={styles.addButtonText}>Add</Text>
@@ -105,9 +88,7 @@ export default function MainPage() {
 
         <Pressable
           style={[styles.button, styles.themeButton]}
-          onPress={() => {
-            toggleTheme();
-          }}
+          onPress={toggleTheme}
         >
           <MaterialIcons
             name={colorScheme === "dark" ? "dark-mode" : "light-mode"}
@@ -117,33 +98,27 @@ export default function MainPage() {
         </Pressable>
       </View>
 
-      <View style={styles.todosMainContainer}>
-        <View style={styles.todosContainer}>
-          <Text style={styles.todosTitle}>IMPORTANT TODOS</Text>
-          <Animated.FlatList
-            style={styles.flatlist}
-            data={importantTodos}
-            renderItem={renderItem}
-            scrollEnabled={false}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            itemLayoutAnimation={LinearTransition}
-            keyboardDismissMode={"on-drag"}
-          />
-        </View>
-
-        <View style={styles.todosContainer}>
-          <Text style={styles.todosTitle}>REST OF THE TODOS</Text>
-          <Animated.FlatList
-            style={styles.flatlist}
-            data={nonImportantTodos}
-            renderItem={renderItem}
-            scrollEnabled={false}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            itemLayoutAnimation={LinearTransition}
-            keyboardDismissMode={"on-drag"}
-          />
-        </View>
-      </View>
+      <SectionList
+        style={{ flex: 1 }}
+        sections={sections}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title } }) => (
+          <Animated.View
+            layout={LinearTransition}
+            style={{
+              backgroundColor: theme.background, // keeps header background consistent
+              paddingVertical: 10,
+            }}
+          >
+            <Text style={styles.todosTitle}>{title}</Text>
+          </Animated.View>
+        )}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        stickySectionHeadersEnabled={true}
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={{ paddingBottom: 50 }}
+      />
     </SafeAreaView>
   );
 }
@@ -152,12 +127,7 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
   return StyleSheet.create({
     container: {
       flex: 1,
-      // justifyContent: "center",
-      // alignItems: "center",
-      // gap: 20,
       backgroundColor: theme.background,
-
-      // backgroundColor: darkColors.black,
     },
     inputContainer: {
       flexDirection: "row",
@@ -165,29 +135,17 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       marginBottom: 10,
       padding: 10,
       width: "100%",
-
       maxWidth: 1024,
       marginHorizontal: "auto",
-      // pointerEvents:"auto" ???
-
       gap: 10,
-
-      // for testing
-      // borderWidth: 2,
-      // borderColor: "pink",
     },
     input: {
       flex: 1,
-      // borderColor: darkColors.grey,
-      // color: darkColors.grey,
-
       borderColor: "grey",
       borderWidth: 1,
       borderRadius: 5,
       padding: 10,
-      marginRight: 10,
       fontSize: 18,
-      minWidth: 0,
       color: theme.text,
     },
     button: {},
@@ -201,37 +159,26 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       color: colorScheme === "dark" ? "black" : "white",
     },
     themeButton: {
-      color: theme.text,
       borderRadius: 5,
       padding: 10,
     },
-    todosMainContainer: {
-      flexDirection: "column",
-      gap: 25,
-    },
     todosTitle: {
-      // color: darkColors.grey,
       color: theme.text,
       fontSize: 20,
       textAlign: "center",
-    },
-    todosContainer: {},
-    flatlist: {
-      // borderWidth: 2,
-      // borderColor: "black",
+      marginVertical: 10,
     },
     flatlistItem: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: 4,
       padding: 10,
       borderBottomColor: "grey",
       borderBottomWidth: 1,
       width: "100%",
       maxWidth: 1024,
       marginHorizontal: "auto",
-      // pointerEvents:"auto" ???
+      gap: 4,
     },
     todoText: {
       flex: 1,
