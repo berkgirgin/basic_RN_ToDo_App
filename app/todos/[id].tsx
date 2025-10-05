@@ -22,9 +22,18 @@ export default function EditScreen() {
 
   // initial values of the todo item
   const [input, setInput] = useState(selectedTodo.title);
+  const [newTodo, setNewTodo] = useState<ToDo>({ ...selectedTodo });
+  //   let newTodo = { ...selectedTodo, title: input };
+
+  // REMINDER: Edit here if you include new fields
+  const isSaveButtonDisabled =
+    input === selectedTodo.title &&
+    newTodo.isImportant === selectedTodo.isImportant &&
+    newTodo.isCompleted === selectedTodo.isCompleted;
 
   function handleSave() {
-    const newTodo: ToDo = { ...selectedTodo!, title: input }; // above has undefined check for selectedTodo
+    // const newTodo: ToDo = { ...selectedTodo!, title: input };
+    // // above has undefined check for selectedTodo
     todoLogic.updateToDo(newTodo);
     router.push("/todos");
   }
@@ -36,11 +45,20 @@ export default function EditScreen() {
   }
 
   function toggleIsImportant() {
-    const newTodo: ToDo = {
-      ...selectedTodo!,
-      isImportant: !selectedTodo!.isImportant,
-    }; // above has undefined check for selectedTodo
-    todoLogic.updateToDo(newTodo);
+    if (todoLogic.isImportantLimitReached) return;
+    //TO DO: make the above better. Add an alert.
+
+    setNewTodo((prev) => {
+      return { ...prev, isImportant: !newTodo.isImportant };
+    });
+
+    // newTodo = { ...newTodo, isImportant: !newTodo.isImportant };
+
+    // const newTodo: ToDo = {
+    //   ...selectedTodo!,
+    //   isImportant: !selectedTodo!.isImportant,
+    // }; // above has undefined check for selectedTodo
+    // todoLogic.updateToDo(newTodo);
   }
 
   return (
@@ -50,15 +68,20 @@ export default function EditScreen() {
 
         <TextInput
           value={input}
-          onChangeText={setInput}
+          onChangeText={(text) => {
+            setInput(text);
+            setNewTodo((prev) => {
+              return { ...prev, title: text };
+            });
+          }}
           placeholder="editing a ToDo.."
         />
 
-        <Text>Is Important: {selectedTodo.isImportant ? "yes" : "no"}</Text>
-        <Text>Is Completed: {selectedTodo.isCompleted ? "yes" : "no"}</Text>
+        <Text>Is Important: {newTodo.isImportant ? "yes" : "no"}</Text>
+        <Text>Is Completed: {newTodo.isCompleted ? "yes" : "no"}</Text>
       </View>
 
-      <Pressable onPress={handleSave}>
+      <Pressable onPress={handleSave} disabled={isSaveButtonDisabled}>
         <Text>Save</Text>
       </Pressable>
 

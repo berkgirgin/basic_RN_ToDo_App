@@ -14,7 +14,7 @@ export default function OverviewPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>OverviewPage</Text>
+      <Text>OVERVIEW PAGE</Text>
       <Link href={"/todos"}>Main Page</Link>
 
       <View>

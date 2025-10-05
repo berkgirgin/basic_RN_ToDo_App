@@ -15,10 +15,12 @@ import {
   getAddedMessage,
   getCompletedMessage,
 } from "@/utilities/statusMessagesHelper";
+import { sortTodoList } from "@/utilities/sortTodoList";
 import { exampleToDos } from "@/data/todos";
 import { ToDo } from "@/types/todo";
 
 type ToDoLogicProps = {
+  isImportantLimitReached: boolean;
   addToDo: (input: string) => void;
   deleteToDo: (id: number) => void;
   updateToDo: (updatedTodo: ToDo) => void;
@@ -46,12 +48,24 @@ function useTodoLogicContext() {
 
 function ToDoLogicProvider({ children }: { children: ReactNode }) {
   const router = useRouter(); // TO FIX: is it the correct way?
-  const MAX_IMPORTANT_TODO_LIMIT = 5;
 
   // latest toDo with biggest ID should be first, not last
   const [toDosArray, setToDosArray] = useState<ToDo[]>(
-    exampleToDos.sort((a, b) => b.id - a.id)
+    sortTodoList(exampleToDos)
   );
+
+  // logic for max important todo limit
+  const MAX_IMPORTANT_TODO_LIMIT = 5;
+  let countImportantTodos = 0;
+
+  for (let i = 0; i < toDosArray.length; i++) {
+    const todo = toDosArray[i];
+    if (todo.isImportant) countImportantTodos++;
+  }
+
+  const isImportantLimitReached =
+    countImportantTodos >= MAX_IMPORTANT_TODO_LIMIT;
+  // **********************+
 
   function addToDo(input: string): void {
     // when input is empty, nothing should happen. Check logic again
@@ -61,7 +75,6 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
 
     // TO ADD: trim the input before adding
 
-    // logic to entry time etc..
     const newId = toDosArray.length === 0 ? 1 : toDosArray[0].id + 1;
     if (newId > 1000000) {
       throw new Error("You have reached 1.000.000 count. Contact Berk");
@@ -70,7 +83,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
     const newToDo: ToDo = {
       id: newId,
       title: input,
-      isImportant: false,
+      isImportant: false, // dont edit this, might break the limit logic
       isCompleted: false,
       timeOfEntry: dateHelper.getCurrentDate(),
       timeOfCompletion: null,
@@ -84,22 +97,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
   }
 
   function updateToDo(updatedTodo: ToDo) {
-    // checking for max important todo limit
-    if (updatedTodo.isCompleted) {
-      let countImportantTodos = 0;
-
-      for (let i = 0; i < toDosArray.length; i++) {
-        const todo = toDosArray[i];
-
-        if (todo.isImportant) countImportantTodos++;
-      }
-
-      if (countImportantTodos >= MAX_IMPORTANT_TODO_LIMIT) {
-        // TO DO: add an alert here
-        return;
-      }
-    }
-    //*********************** */
+    if (isImportantLimitReached) return;
 
     const newTodos = toDosArray.map((todo) =>
       todo.id === updatedTodo.id ? updatedTodo : todo
@@ -178,6 +176,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
   return (
     <todoLogicContext.Provider
       value={{
+        isImportantLimitReached,
         addToDo,
         deleteToDo,
         updateToDo,
