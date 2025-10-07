@@ -5,7 +5,7 @@ type StatusMessage = {
 
 // Helper for recently completed wishes
 export const getCompletedMessage = (count: number): string => {
-  const cappedCount = count >= 5 ? 5 : count;
+  const cappedCount = count >= 3 ? 3 : count;
   const messageObj = recentlyCompletedMessages.find(
     (m) => m.count === cappedCount
   );
@@ -14,71 +14,51 @@ export const getCompletedMessage = (count: number): string => {
 
 // Helper for recently added wishes
 export const getAddedMessage = (count: number): string => {
-  const cappedCount = count >= 5 ? 5 : count;
+  const cappedCount = count >= 3 ? 3 : count;
   const messageObj = recentlyAddedMessages.find((m) => m.count === cappedCount);
   return messageObj ? messageObj.message : "😎 Status unknown…";
 };
 
-const recentlyCompletedMessages = [
+const recentlyCompletedMessages: StatusMessage[] = [
   {
     count: 0,
     message:
-      "😴 Zero wishes completed… but don’t worry, I’m just warming up. Patience, my queen.",
+      "Haven’t completed any wishes yet… patience, my dear P.M.D, your love is warming up.",
   },
   {
     count: 1,
     message:
-      "💥 1 wish down. Bow down — your boyfriend is officially unstoppable.",
+      "One wish fulfilled, stay in position! — your devoted evil man has arrived.",
   },
   {
     count: 2,
     message:
-      "🦾 2 wishes crushed. Honestly, I should be on a billboard: “Legend in Action.”",
+      "Two wishes have been obliterated. Clearly, I’m an American soldier.",
   },
   {
     count: 3,
     message:
-      "🏎️ 3 wishes fulfilled. I’m moving faster than your heart can keep up.",
-  },
-  {
-    count: 4,
-    message:
-      "🔥 4 wishes granted. Warning: excessive boyfriend excellence detected.",
-  },
-  {
-    count: 5,
-    message:
-      "🚀 5+ wishes obliterated. I’m basically a one-man superhero franchise.",
+      "Three or more wishes conquered. Behold, your personal superhero, unmatched and unstoppable, delivering every desire of yours.",
   },
 ];
 
-const recentlyAddedMessages = [
+const recentlyAddedMessages: StatusMessage[] = [
   {
     count: 0,
     message:
-      "✨ No wishes yet? Smart move. I’m too powerful to handle too many.",
+      "No wishes yet? Smart move, my sexy P.M.D. Calmness suits you beautifully.",
   },
   {
     count: 1,
-    message:
-      "😎 1 wish added. Easy — I like it when a challenge is manageable.",
+    message: "A wish has been added. Easy — I like a manageable challenge.",
   },
   {
     count: 2,
-    message: "🕶️ 2 wishes? Bold. But I’m still winning at this game.",
+    message: "Two wishes noted. Not ideal, but clearly you know I love you.",
   },
   {
     count: 3,
-    message: "🏆 3 wishes noted. Careful, I might start breaking records.",
-  },
-  {
-    count: 4,
     message:
-      "🔥 4 wishes… now we’re flirting with overkill. Are you ready for me?",
-  },
-  {
-    count: 5,
-    message:
-      "🤯 5+ wishes?! Slow down, mortal. I can’t be held responsible for my own excellence.",
+      "Three or more wishes? Careful… you’re pushing your Romeo to his limits.",
   },
 ];

@@ -2,6 +2,12 @@ import { useState, createContext, useContext, type ReactNode } from "react";
 import { Appearance } from "react-native";
 import { Colors } from "@/constants/themeColors";
 
+import {
+  Poppins_400Regular,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
+
 export type Theme = {
   text: string;
   background: string;
@@ -9,6 +15,7 @@ export type Theme = {
     firstColor: string;
     secondColor: string;
   };
+  gold: string;
   icon: string;
   button: string;
 };

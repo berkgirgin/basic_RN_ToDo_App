@@ -10,10 +10,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useRouter } from "expo-router";
 import {
   useState,
+  useEffect,
   createContext,
   useContext,
   type ReactNode,
-  useEffect,
 } from "react";
 
 import { DateHelper } from "../utilities/dateHelper";
@@ -40,6 +40,7 @@ type ToDoLogicProps = {
     countRecentlyCompleted: number;
     statusMessageRecentlyCompleted: string;
   };
+  MAX_IMPORTANT_TODO_LIMIT: number;
 };
 
 const dateHelper = DateHelper();
@@ -107,12 +108,12 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // TO ADD: trim the input before adding
+    // const newId = toDosArray.length === 0 ? 1 : toDosArray[0].id + 1;
+    // if (newId > 1000000) {
+    //   throw new Error("You have reached 1.000.000 count. Contact Berk");
+    // }
 
-    const newId = toDosArray.length === 0 ? 1 : toDosArray[0].id + 1;
-    if (newId > 1000000) {
-      throw new Error("You have reached 1.000.000 count. Contact Berk");
-    }
+    const newId = Date.now();
 
     const newToDo: ToDo = {
       id: newId,
@@ -218,6 +219,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
         handleTodoLongPress,
         toDosArray,
         getOverviewData,
+        MAX_IMPORTANT_TODO_LIMIT,
       }}
     >
       {children}

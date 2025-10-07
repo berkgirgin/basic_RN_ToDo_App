@@ -1,18 +1,64 @@
 import { Stack } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { ToDoLogicProvider } from "../context/todoLogicContext";
-import { ThemeProvider } from "@/context/themeContext";
-import { HeaderTitle } from "@react-navigation/elements";
+import { ThemeProvider, useThemeContext } from "@/context/themeContext";
+import { StatusBar } from "expo-status-bar";
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+
+// TO FIX : two times cancel, back button goes back twice to same /todos page
+
+// Top-level hook is fine here because this component is rendered inside ThemeProvider
+function ThemedStatusBar() {
+  const { colorScheme } = useThemeContext();
+
+  return (
+    <StatusBar
+      style={colorScheme === "dark" ? "light" : "dark"} // text/icons color
+      backgroundColor="transparent" // background for Android
+      translucent
+    />
+  );
+}
+
+// This component wraps Stack and reads theme context safely
+function ThemedStack() {
+  const { theme, colorScheme } = useThemeContext();
+
+  return (
+    <Stack
+      screenOptions={{
+        headerRight: () => <ThemeToggleButton />,
+        headerStyle: {
+          backgroundColor: colorScheme === "light" ? "white" : "black",
+        },
+        headerTintColor: theme.text,
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerShadowVisible: false,
+      }}
+    >
+      <Stack.Screen name="index" options={{ title: "Overview" }} />
+      <Stack.Screen name="todos/index" options={{ title: "All Your Wishes" }} />
+      <Stack.Screen name="todos/[id]" options={{ title: "Editing a Wish" }} />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
+  const insets = useSafeAreaInsets(); // safe area top for notch/status bar
+  const HEADER_HEIGHT = 56; // default stack header height
+
   return (
     <ToDoLogicProvider>
       <ThemeProvider>
         <SafeAreaProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="todos/[id]" />
-          </Stack>
+          <ThemedStatusBar />
+          <ThemedStack />
         </SafeAreaProvider>
       </ThemeProvider>
     </ToDoLogicProvider>

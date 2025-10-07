@@ -13,6 +13,8 @@ function LocalStorage(): LocalStorage {
   const LOCAL_STORAGE_KEY = "TodoApp";
 
   async function fetchData() {
+    // return exampleToDos;
+
     try {
       const jsonValue = await AsyncStorage.getItem(LOCAL_STORAGE_KEY);
       const storageTodos = jsonValue != null ? JSON.parse(jsonValue) : null;

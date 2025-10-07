@@ -5,9 +5,12 @@ import {
   TextInput,
   Pressable,
   SectionList,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { useTodoLogicContext } from "@/context/todoLogicContext";
 import { useThemeContext } from "@/context/themeContext";
 import { Theme, ColorScheme } from "@/context/themeContext";
@@ -15,14 +18,13 @@ import { sortTodoList } from "@/utilities/sortTodoList";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { ToDo } from "@/types/todo";
 
 export default function MainPage() {
   const todoLogic = useTodoLogicContext();
-  const { colorScheme, theme, toggleTheme } = useThemeContext();
+  const { colorScheme, theme } = useThemeContext();
 
   const styles = createStyles(theme, colorScheme);
 
@@ -41,13 +43,21 @@ export default function MainPage() {
   ];
 
   // render a single todo item
-  function renderItem({ item }: { item: ToDo }) {
+  function renderItem({ item, index }: { item: ToDo; index: number }) {
     return (
-      <Animated.View style={styles.flatlistItem} layout={LinearTransition}>
+      <Animated.View
+        style={[
+          styles.flatlistItem,
+          index % 2 === 0
+            ? styles.flatlistItem_zebraStripe1
+            : styles.flatlistItem_zebraStripe2,
+        ]}
+        layout={LinearTransition}
+      >
         <Pressable
           onPress={() => todoLogic.handleTodoShortPress(item.id)}
           onLongPress={() => todoLogic.handleTodoLongPress(item.id)}
-          style={{ flex: 1 }}
+          style={styles.todoTextContainer}
         >
           <Text
             style={[styles.todoText, item.isCompleted && styles.completedText]}
@@ -56,7 +66,11 @@ export default function MainPage() {
           </Text>
         </Pressable>
         <Pressable onPress={() => todoLogic.deleteToDo(item.id)}>
-          <MaterialCommunityIcons name="delete-circle" size={36} color="red" />
+          <MaterialCommunityIcons
+            name="delete-circle"
+            size={36}
+            color={theme.icon}
+          />
         </Pressable>
       </Animated.View>
     );
@@ -68,6 +82,7 @@ export default function MainPage() {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
+          maxLength={30}
           value={input}
           onChangeText={setInput}
           placeholder="enter a To Do.."
@@ -86,16 +101,7 @@ export default function MainPage() {
           <Text style={styles.addButtonText}>Add</Text>
         </Pressable>
 
-        <Pressable
-          style={[styles.button, styles.themeButton]}
-          onPress={toggleTheme}
-        >
-          <MaterialIcons
-            name={colorScheme === "dark" ? "dark-mode" : "light-mode"}
-            size={24}
-            color={theme.text}
-          />
-        </Pressable>
+        {/* <ThemeToggleButton /> */}
       </View>
 
       <SectionList
@@ -128,6 +134,7 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
     container: {
       flex: 1,
       backgroundColor: theme.background,
+      marginTop: Platform.OS === "ios" ? -40 : 0,
     },
     inputContainer: {
       flexDirection: "row",
@@ -141,11 +148,12 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
     },
     input: {
       flex: 1,
-      borderColor: "grey",
+      borderColor: theme.button,
       borderWidth: 1,
       borderRadius: 5,
       padding: 10,
       fontSize: 18,
+      fontWeight: "bold",
       color: theme.text,
     },
     button: {},
@@ -158,10 +166,6 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       fontSize: 18,
       color: colorScheme === "dark" ? "black" : "white",
     },
-    themeButton: {
-      borderRadius: 5,
-      padding: 10,
-    },
     todosTitle: {
       color: theme.text,
       fontSize: 20,
@@ -173,17 +177,26 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       alignItems: "center",
       justifyContent: "space-between",
       padding: 10,
-      borderBottomColor: "grey",
+      borderColor: theme.text,
       borderBottomWidth: 1,
+      borderTopWidth: 1,
       width: "100%",
       maxWidth: 1024,
       marginHorizontal: "auto",
-      gap: 4,
+    },
+    flatlistItem_zebraStripe1: {
+      backgroundColor: theme.zebraStripeBackground.firstColor,
+    },
+    flatlistItem_zebraStripe2: {
+      backgroundColor: theme.zebraStripeBackground.secondColor,
+    },
+    todoTextContainer: {
+      flex: 1,
     },
     todoText: {
-      flex: 1,
       fontSize: 18,
       color: theme.text,
+      // textAlignVertical: "center",
     },
     completedText: {
       textDecorationLine: "line-through",

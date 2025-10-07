@@ -1,22 +1,53 @@
+// export const Colors = {
+//   light: {
+//     text: "black",
+//     background: "white",
+//     zebraStripeBackground: {
+//       firstColor: "#f9f9f9",
+//       secondColor: "#e6e6e6",
+//     },
+//     gold: "#eebc1d",
+//     icon: "black",
+//     button: "royalblue",
+//   },
+//   dark: {
+//     text: "white",
+//     background: "black",
+//     zebraStripeBackground: {
+//       firstColor: "#1a1a1a",
+//       secondColor: "#2a2a2a",
+//     },
+//     gold: "#FFC700",
+//     icon: "red",
+//     button: "white",
+//   },
+// };
+
 export const Colors = {
   light: {
-    text: "black",
-    background: "white",
+    text: "#141010",
+    background: "#fdfdcb",
     zebraStripeBackground: {
       firstColor: "#f9f9f9",
       secondColor: "#e6e6e6",
     },
-    icon: "black",
+    gold: "#eebc1d",
+    icon: "#d90429",
     button: "royalblue",
   },
   dark: {
-    text: "white",
-    background: "black",
+    // text: "#c3195d",
+    text: "#ff8ab4",
+    background: "#141010",
     zebraStripeBackground: {
-      firstColor: "#1a1a1a",
-      secondColor: "#2a2a2a",
+      firstColor: "#222831",
+      secondColor: "#2e343c",
+      // firstColor: "#3a4750",
+      // secondColor: "#303841",
     },
+    gold: "#FFC700",
     icon: "red",
-    button: "white",
+    button: "#ff4f81",
+    // button: "#007cb9",
   },
 };
