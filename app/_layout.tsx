@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import {
   SafeAreaProvider,
   SafeAreaView,
@@ -8,8 +8,7 @@ import { ToDoLogicProvider } from "../context/todoLogicContext";
 import { ThemeProvider, useThemeContext } from "@/context/themeContext";
 import { StatusBar } from "expo-status-bar";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
-
-// TO FIX : two times cancel, back button goes back twice to same /todos page
+import { Text, Pressable } from "react-native";
 
 // Top-level hook is fine here because this component is rendered inside ThemeProvider
 function ThemedStatusBar() {
@@ -26,7 +25,8 @@ function ThemedStatusBar() {
 
 // This component wraps Stack and reads theme context safely
 function ThemedStack() {
-  const { theme, colorScheme } = useThemeContext();
+  const router = useRouter();
+  const { theme, colorScheme, myFontFamily } = useThemeContext();
 
   return (
     <Stack
@@ -38,13 +38,19 @@ function ThemedStack() {
         headerTintColor: theme.text,
         headerTitleStyle: {
           fontWeight: "bold",
+          fontFamily: myFontFamily,
         },
         headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="index" options={{ title: "Overview" }} />
       <Stack.Screen name="todos/index" options={{ title: "All Your Wishes" }} />
-      <Stack.Screen name="todos/[id]" options={{ title: "Editing a Wish" }} />
+      <Stack.Screen
+        name="todos/[id]"
+        options={{
+          title: "Editing a Wish",
+        }}
+      />
     </Stack>
   );
 }

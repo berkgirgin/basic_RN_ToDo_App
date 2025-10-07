@@ -56,13 +56,10 @@ function useTodoLogicContext() {
 }
 
 function ToDoLogicProvider({ children }: { children: ReactNode }) {
-  const router = useRouter(); // TO FIX: is it the correct way?
+  const router = useRouter();
 
   // latest toDo with biggest ID should be first, not last
-  const [toDosArray, setToDosArray] = useState<ToDo[]>(
-    // sortTodoList(exampleToDos)
-    []
-  );
+  const [toDosArray, setToDosArray] = useState<ToDo[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -103,22 +100,17 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
   // **********************+
 
   function addToDo(input: string): void {
-    // when input is empty, nothing should happen. Check logic again
+    // when input is empty, nothing should happen.
     if (input == "" || undefined) {
       return;
     }
-
-    // const newId = toDosArray.length === 0 ? 1 : toDosArray[0].id + 1;
-    // if (newId > 1000000) {
-    //   throw new Error("You have reached 1.000.000 count. Contact Berk");
-    // }
 
     const newId = Date.now();
 
     const newToDo: ToDo = {
       id: newId,
       title: input,
-      isImportant: false, // dont edit this, might break the limit logic
+      isImportant: false, // dont edit this, might break the important limit logic
       isCompleted: false,
       timeOfEntry: dateHelper.getCurrentDate(),
       timeOfCompletion: null,
@@ -169,7 +161,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
 
   // going to the edit page
   function handleTodoLongPress(id: number) {
-    router.push(`./todos/${id}`);
+    router.navigate(`./todos/${id}`); // navigate is to avoid duplicates on stack
   }
 
   function getOverviewData() {

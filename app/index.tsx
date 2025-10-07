@@ -16,7 +16,7 @@ import { useThemeContext } from "@/context/themeContext";
 
 export default function OverviewPage() {
   const todoLogic = useTodoLogicContext();
-  const { theme } = useThemeContext();
+  const { theme, myFontFamily } = useThemeContext();
   const router = useRouter();
 
   const overviewData = useMemo(() => {
@@ -45,7 +45,9 @@ export default function OverviewPage() {
             router.push("/todos");
           }}
         >
-          <Text style={styles.pressableText}>TO "EVIL TASKS"</Text>
+          <Text style={[styles.pressableText, { fontFamily: myFontFamily }]}>
+            TO "EVIL TASKS"
+          </Text>
         </Pressable>
 
         <View
@@ -54,7 +56,12 @@ export default function OverviewPage() {
             { backgroundColor: theme.zebraStripeBackground.firstColor },
           ]}
         >
-          <Text style={[styles.overviewTitle, { color: theme.text }]}>
+          <Text
+            style={[
+              styles.overviewTitle,
+              { color: theme.text, fontFamily: myFontFamily },
+            ]}
+          >
             30 DAY OVERVIEW
           </Text>
 
@@ -64,12 +71,22 @@ export default function OverviewPage() {
               { backgroundColor: theme.zebraStripeBackground.secondColor },
             ]}
           >
-            <Text style={[styles.statusMessage, { color: theme.text }]}>
+            <Text
+              style={[
+                styles.statusMessage,
+                { color: theme.text, fontFamily: myFontFamily },
+              ]}
+            >
               {overviewData.statusMessageRecentlyAdded}
             </Text>
-            <Text style={[styles.count, { color: theme.icon }]}>
+            <Text
+              style={[
+                styles.count,
+                { color: theme.icon, fontFamily: myFontFamily },
+              ]}
+            >
               Recently added:{" "}
-              <Text style={styles.countNumber}>
+              <Text style={[styles.countNumber, { fontFamily: myFontFamily }]}>
                 {overviewData.countRecentlyAdded}
               </Text>
             </Text>
@@ -81,12 +98,22 @@ export default function OverviewPage() {
               { backgroundColor: theme.zebraStripeBackground.secondColor },
             ]}
           >
-            <Text style={[styles.statusMessage, { color: theme.text }]}>
+            <Text
+              style={[
+                styles.statusMessage,
+                { color: theme.text, fontFamily: myFontFamily },
+              ]}
+            >
               {overviewData.statusMessageRecentlyCompleted}
             </Text>
-            <Text style={[styles.count, { color: theme.icon }]}>
+            <Text
+              style={[
+                styles.count,
+                { color: theme.icon, fontFamily: myFontFamily },
+              ]}
+            >
               Recently completed:{" "}
-              <Text style={styles.countNumber}>
+              <Text style={[styles.countNumber, { fontFamily: myFontFamily }]}>
                 {overviewData.countRecentlyCompleted}
               </Text>
             </Text>
@@ -103,7 +130,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     alignItems: "center",
+    alignSelf: "center",
     paddingBottom: 40,
+    width: "100%",
+    maxWidth: 1024,
+    marginTop: Platform.OS === "android" ? 40 : 0,
   },
   headerImage: {
     width: "100%",

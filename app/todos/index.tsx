@@ -24,9 +24,9 @@ import { ToDo } from "@/types/todo";
 
 export default function MainPage() {
   const todoLogic = useTodoLogicContext();
-  const { colorScheme, theme } = useThemeContext();
+  const { colorScheme, theme, myFontFamily } = useThemeContext();
 
-  const styles = createStyles(theme, colorScheme);
+  const styles = createStyles(theme, colorScheme, myFontFamily);
 
   const [input, setInput] = useState("");
 
@@ -60,7 +60,11 @@ export default function MainPage() {
           style={styles.todoTextContainer}
         >
           <Text
-            style={[styles.todoText, item.isCompleted && styles.completedText]}
+            style={[
+              styles.todoText,
+              item.isCompleted && styles.completedText,
+              { fontFamily: myFontFamily },
+            ]}
           >
             {item.title}
           </Text>
@@ -81,7 +85,7 @@ export default function MainPage() {
       {/* Input + buttons */}
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { fontFamily: myFontFamily }]}
           maxLength={30}
           value={input}
           onChangeText={setInput}
@@ -98,7 +102,9 @@ export default function MainPage() {
             }
           }}
         >
-          <Text style={styles.addButtonText}>Add</Text>
+          <Text style={[styles.addButtonText, { fontFamily: myFontFamily }]}>
+            Add
+          </Text>
         </Pressable>
 
         {/* <ThemeToggleButton /> */}
@@ -113,11 +119,13 @@ export default function MainPage() {
           <Animated.View
             layout={LinearTransition}
             style={{
-              backgroundColor: theme.background, // keeps header background consistent
+              backgroundColor: theme.background,
               paddingVertical: 10,
             }}
           >
-            <Text style={styles.todosTitle}>{title}</Text>
+            <Text style={[styles.todosTitle, { fontFamily: myFontFamily }]}>
+              {title}
+            </Text>
           </Animated.View>
         )}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -129,12 +137,16 @@ export default function MainPage() {
   );
 }
 
-function createStyles(theme: Theme, colorScheme: ColorScheme) {
+function createStyles(
+  theme: Theme,
+  colorScheme: ColorScheme,
+  myFontFamily: string
+) {
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      marginTop: Platform.OS === "ios" ? -40 : 0,
+      // marginTop: Platform.OS === "ios" ? 0 : 0,
     },
     inputContainer: {
       flexDirection: "row",
@@ -169,6 +181,7 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
     todosTitle: {
       color: theme.text,
       fontSize: 20,
+      fontWeight: "bold",
       textAlign: "center",
       marginVertical: 10,
     },
@@ -196,7 +209,6 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
     todoText: {
       fontSize: 18,
       color: theme.text,
-      // textAlignVertical: "center",
     },
     completedText: {
       textDecorationLine: "line-through",

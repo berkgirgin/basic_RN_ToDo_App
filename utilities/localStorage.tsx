@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { exampleToDos } from "@/data/todos";
 
 import { ToDo } from "@/types/todo";
-import { Try } from "expo-router/build/views/Try";
 
 type LocalStorage = {
   fetchData: () => Promise<ToDo[]>;

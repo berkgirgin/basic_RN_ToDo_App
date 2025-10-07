@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useTodoLogicContext } from "../../context/todoLogicContext";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams, router, useNavigation } from "expo-router";
 import { useThemeContext, Theme, ColorScheme } from "@/context/themeContext";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -19,10 +19,12 @@ import { ToDo } from "@/types/todo";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 
 export default function EditScreen() {
+  const navigation = useNavigation();
+
   const id = parseInt(useLocalSearchParams<{ id: string }>().id);
 
   const todoLogic = useTodoLogicContext();
-  const { theme, colorScheme } = useThemeContext();
+  const { theme, colorScheme, myFontFamily } = useThemeContext();
 
   const styles = createStyles(theme, colorScheme);
 
@@ -30,33 +32,30 @@ export default function EditScreen() {
   if (!selectedTodo) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>Todo not found</Text>
+        <Text style={[styles.errorText, { fontFamily: myFontFamily }]}>
+          Todo not found
+        </Text>
       </SafeAreaView>
     );
   }
 
-  // initial values of the todo item
   const [input, setInput] = useState(selectedTodo.title);
   const [newTodo, setNewTodo] = useState<ToDo>({ ...selectedTodo });
-  //   let newTodo = { ...selectedTodo, title: input };
 
-  // REMINDER: Edit here if you include new fields
   const isSaveButtonDisabled =
     input === selectedTodo.title &&
     newTodo.isImportant === selectedTodo.isImportant &&
     newTodo.isCompleted === selectedTodo.isCompleted;
 
   function handleSave() {
-    // const newTodo: ToDo = { ...selectedTodo!, title: input };
-    // // above has undefined check for selectedTodo
     todoLogic.updateToDo(newTodo);
-    router.replace("/todos");
+    // router.replace("/todos");
+    router.back();
   }
 
   function handleCancel() {
-    // To Add: test scenario: edit something, cancel, go to that page again
-    // TO FIX: when u go back to /todos, going back with stack goes to /todos/[id]
-    router.replace("/todos");
+    // router.replace("/todos");
+    router.back();
   }
 
   function toggleIsImportant() {
@@ -76,14 +75,7 @@ export default function EditScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View style={styles.headerRow}>
-        <Text style={styles.title}>Editing Screen</Text>
-        <ThemeToggleButton />
-      </View> */}
-
       <View style={styles.inputContainer}>
-        {/* <Text>ID: {selectedTodo.id}</Text> */}
-
         <TextInput
           value={input}
           maxLength={30}
@@ -95,16 +87,14 @@ export default function EditScreen() {
           }}
           placeholder="editing a ToDo.."
           placeholderTextColor="grey"
-          style={styles.input}
+          style={[styles.input, { fontFamily: myFontFamily }]}
         />
 
-        {/* <Text>Is Important: {newTodo.isImportant ? "yes" : "no"}</Text> */}
-        {/* Replaced above with a star toggle button */}
         <Pressable onPress={toggleIsImportant} style={styles.starButton}>
           <FontAwesome
             name={newTodo.isImportant ? "star" : "star-o"}
             size={60}
-            color={newTodo.isImportant ? theme.gold : "grey"} // gold when active, theme text when inactive
+            color={newTodo.isImportant ? theme.gold : "grey"}
           />
         </Pressable>
       </View>
@@ -119,14 +109,18 @@ export default function EditScreen() {
           onPress={handleSave}
           disabled={isSaveButtonDisabled}
         >
-          <Text style={styles.buttonText}>Save</Text>
+          <Text style={[styles.buttonText, { fontFamily: myFontFamily }]}>
+            Save
+          </Text>
         </Pressable>
 
         <Pressable
           style={[styles.button, styles.cancelButton]}
           onPress={handleCancel}
         >
-          <Text style={styles.buttonText}>Cancel</Text>
+          <Text style={[styles.buttonText, { fontFamily: myFontFamily }]}>
+            Cancel
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -140,7 +134,7 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       backgroundColor: theme.background,
       padding: 20,
       gap: 20,
-      marginTop: Platform.OS === "ios" ? -40 : 0,
+      // marginTop: Platform.OS === "ios" ? -40 : 0,
     },
     headerRow: {
       flexDirection: "row",
@@ -170,7 +164,6 @@ function createStyles(theme: Theme, colorScheme: ColorScheme) {
       fontSize: 18,
       fontWeight: "bold",
       color: theme.text,
-      // backgroundColor: theme.button,
     },
     errorText: {
       color: "red",
