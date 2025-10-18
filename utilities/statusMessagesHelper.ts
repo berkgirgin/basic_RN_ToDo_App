@@ -9,14 +9,14 @@ export const getCompletedMessage = (count: number): string => {
   const messageObj = recentlyCompletedMessages.find(
     (m) => m.count === cappedCount
   );
-  return messageObj ? messageObj.message : "😎 Status unknown…";
+  return messageObj ? messageObj.message : "Status unknown…";
 };
 
 // Helper for recently added wishes
 export const getAddedMessage = (count: number): string => {
   const cappedCount = count >= 3 ? 3 : count;
   const messageObj = recentlyAddedMessages.find((m) => m.count === cappedCount);
-  return messageObj ? messageObj.message : "😎 Status unknown…";
+  return messageObj ? messageObj.message : "Status unknown…";
 };
 
 const recentlyCompletedMessages: StatusMessage[] = [
@@ -28,7 +28,7 @@ const recentlyCompletedMessages: StatusMessage[] = [
   {
     count: 1,
     message:
-      "One wish fulfilled, stay in position! — your devoted evil man has arrived.",
+      "One wish fulfilled, stay ´in position´! — your devoted evil man has arrived.",
   },
   {
     count: 2,

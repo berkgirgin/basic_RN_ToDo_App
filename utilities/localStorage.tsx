@@ -8,9 +8,9 @@ type LocalStorage = {
   storeData: (dataToSave: ToDo[]) => Promise<void>;
 };
 
-function LocalStorage(): LocalStorage {
-  const LOCAL_STORAGE_KEY = "TodoApp";
+const LOCAL_STORAGE_KEY = "TodoApp";
 
+function LocalStorage(): LocalStorage {
   async function fetchData() {
     // return exampleToDos;
 
@@ -40,4 +40,4 @@ function LocalStorage(): LocalStorage {
   return { fetchData, storeData };
 }
 
-export { LocalStorage };
+export { LocalStorage, LOCAL_STORAGE_KEY };
