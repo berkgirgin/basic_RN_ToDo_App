@@ -124,7 +124,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
   }
 
   function updateToDo(updatedTodo: ToDo) {
-    if (isImportantLimitReached) return;
+    // if (isImportantLimitReached) return;
 
     const newTodos = toDosArray.map((todo) =>
       todo.id === updatedTodo.id ? updatedTodo : todo

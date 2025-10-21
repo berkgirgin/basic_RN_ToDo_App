@@ -1,50 +1,64 @@
-# Welcome to your Expo app 👋
+# React Native Expo - Romantic ToDo App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple and efficient ToDo app built for my girlfriend which will help her manage her wishes from me effortlessly. ✨
+
+This app offers a clean user interface with features like task listing, adding, editing, and deleting tasks.
+
+## Features
+
+- **Cross platform mobile app**: supports both ios and android
+- **Add, Edit, and Delete Tasks**: Easily add, edit, or delete tasks based on your needs.
+- **Light and Dark modes**: Easily switch between the light or the pink themed dark mode.
+- **Local Storage**: Store your task list persistently, ensuring that your tasks remain available even if the app is closed and reopened.
+- **Overview Page**: See the overview of last 30 days, with funny quotes.
+- **Priority Tasks**: Ability to mark some tasks as important, while providing a hard limit for that.
+
+## Screenshots
+
+<!-- ![Preview](@/assets/screenshots/sc1.png) -->
+
+<div style="display: flex; gap: 10px;">
+
+  <img src="./assets/screenshots/sc1.png" alt="Screenshot 1" width="200"/>
+  <img src="./assets/screenshots/sc2.png" alt="Screenshot 2" width="200"/>
+  <img src="./assets/screenshots/sc3.png" alt="Screenshot 3" width="200"/>
+
+</div>
 
 ## Get started
 
-1. Install dependencies
+### Prerequisites 🛠️
+
+- [Node.js](https://nodejs.org/) installed on your machine
+
+### Installation 📦
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/berkgirgin/basic_RN_ToDo_App.git
+   ```
+
+2. **Change into the project directory:**
+
+   ```bash
+   cd basic_RN_ToDo_App
+   ```
+
+3. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+### Running the App(in Expo) ▶️
 
-   ```bash
-   npx expo start
-   ```
+```bash
+npm start
+```
 
 In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Press a │ open Android
+- Press i │ open iOS simulator
+- Press w │ open web
