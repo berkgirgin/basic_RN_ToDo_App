@@ -87,7 +87,7 @@ function ToDoLogicProvider({ children }: { children: ReactNode }) {
   }, [toDosArray]);
 
   // logic for max important todo limit
-  const MAX_IMPORTANT_TODO_LIMIT = 5;
+  const MAX_IMPORTANT_TODO_LIMIT = 4;
   let countImportantTodos = 0;
 
   for (let i = 0; i < toDosArray.length; i++) {

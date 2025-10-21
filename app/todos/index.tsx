@@ -53,11 +53,13 @@ export default function MainPage() {
             : styles.flatlistItem_zebraStripe2,
         ]}
         layout={LinearTransition}
+        testID={`todo-container-${item.id}`}
       >
         <Pressable
           onPress={() => todoLogic.handleTodoShortPress(item.id)}
           onLongPress={() => todoLogic.handleTodoLongPress(item.id)}
           style={styles.todoTextContainer}
+          testID={`todo-${item.id}`}
         >
           <Text
             style={[
@@ -65,11 +67,15 @@ export default function MainPage() {
               item.isCompleted && styles.completedText,
               { fontFamily: myFontFamily },
             ]}
+            testID={`todo-text-${item.id}`}
           >
             {item.title}
           </Text>
         </Pressable>
-        <Pressable onPress={() => todoLogic.deleteToDo(item.id)}>
+        <Pressable
+          onPress={() => todoLogic.deleteToDo(item.id)}
+          testID={`delete-button-${item.id}`}
+        >
           <MaterialCommunityIcons
             name="delete-circle"
             size={36}
@@ -91,6 +97,7 @@ export default function MainPage() {
           onChangeText={setInput}
           placeholder="enter a To Do.."
           placeholderTextColor={"grey"}
+          testID="todo-input"
         />
 
         <Pressable
@@ -101,6 +108,8 @@ export default function MainPage() {
               setInput("");
             }
           }}
+          disabled={!input.trim()} // <- disables automatically
+          testID="add-button"
         >
           <Text style={[styles.addButtonText, { fontFamily: myFontFamily }]}>
             Add

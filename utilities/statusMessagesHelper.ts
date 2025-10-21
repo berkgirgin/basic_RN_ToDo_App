@@ -28,7 +28,7 @@ const recentlyCompletedMessages: StatusMessage[] = [
   {
     count: 1,
     message:
-      "One wish fulfilled, stay ´in position´! — your devoted evil man has arrived.",
+      "One wish fulfilled, stay in position! — your devoted evil man has arrived.",
   },
   {
     count: 2,
